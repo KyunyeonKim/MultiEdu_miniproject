@@ -35,6 +35,6 @@
 
     <input type="submit" value="Join">
 </form>
-<a href="/m_head.do">Back to Product List</a>
+<a href="m_head.do">Back to Product List</a>
 </body>
 </html>

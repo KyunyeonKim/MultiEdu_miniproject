@@ -36,6 +36,7 @@
             <li><a href="${pageContext.request.contextPath}/m_login.do">로그인</a></li>
             <li><a href="${pageContext.request.contextPath}/m_update.do">사용자 정보 변경</a></li>
             <li><a href="${pageContext.request.contextPath}/m_logout.do">로그아웃</a></li>
+            <li><a href="${pageContext.request.contextPath}/o_pselectAll.do">구매내역</a></li>
         </ul>
     </nav>
     <div>

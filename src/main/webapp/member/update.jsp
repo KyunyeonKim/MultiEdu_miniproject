@@ -27,6 +27,7 @@
 
     <input type="submit" value="Update Member" />
 </form>
+<a href="m_head.do">Back to Product List</a>
 
 </body>
 </html>

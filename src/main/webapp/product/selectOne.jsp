@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: kgn47
-  Date: 24. 8. 13.
-  Time: 오전 11:44
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -39,6 +32,14 @@
         <td><img src="upload/${vo2.img}" alt="Product Image" width="100" /></td>
     </tr>
 </table>
+
+<!-- 구매하기 버튼 추가 -->
+<form action="o_insertOK.do" method="post">
+    <input type="hidden" name="product_id" value="${vo2.product_id}" />
+    <input type="hidden" name="member_id" value="${sessionScope.loggedInUser}" /> <!-- 세션에서 member_id 가져옴 -->
+    <input type="submit" value="Buy Now" />
+</form>
+
 <a href="p_selectAll.do">Back to Product List</a>
 <a href="p_update.do?product_id=${vo2.product_id}">Edit Product</a>
 <a href="p_delete.do?product_id=${vo2.product_id}">Delete Product</a>

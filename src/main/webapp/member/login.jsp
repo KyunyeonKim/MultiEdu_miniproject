@@ -22,8 +22,11 @@
     <br>
     <input type="submit" value="Login">
 </form>
+<a href="m_head.do">Back to Product List</a>
 <% if (request.getParameter("error") != null) { %>
 <p style="color: red;">Login failed. Please check your ID and Password.</p>
 <% } %>
+
+
 </body>
 </html>
