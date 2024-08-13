@@ -26,8 +26,8 @@ public class MemberDAOImpl implements MemberDao{
             conn = DriverManager.getConnection(URL,USER,PASSWORD);
             System.out.println("conn successed...");
 
-            String sql = "insert into shop_member(num,id,pw,name,tel) " +
-                    "values(seq_member.nextval,?,?,?,?)";
+            String sql = "insert into shop_member(member_id,pw,name,tel) " +
+                    "values(?,?,?,?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1,vo.getMember_id());
             pstmt.setString(2,vo.getPw());
@@ -67,7 +67,7 @@ public class MemberDAOImpl implements MemberDao{
             conn = DriverManager.getConnection(URL,USER,PASSWORD);
             System.out.println("conn successed...");
 
-            String sql = "update shop_member pw=?,name=?,tel=? " +
+            String sql = "update shop_member set pw=?,name=?,tel=? " +
                     " where member_id=?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1,vo.getPw());
@@ -271,10 +271,10 @@ public class MemberDAOImpl implements MemberDao{
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1,"%"+searchWord+"%");
 
-            //5. 반환(응답)
+
             rs = pstmt.executeQuery();//select문에서 만 사용하는 함수
 
-            //6. rs >>> list에 할당
+
             while(rs.next()){//읽어들일 행이 있으면 true
                 MemberVO vo = new MemberVO();
                 vo.setMember_id(rs.getString("member_id"));
@@ -314,14 +314,14 @@ public class MemberDAOImpl implements MemberDao{
     }
 
     @Override
-    public int login(String id, String password) {
-        String sql = "SELECT COUNT(*) FROM shop_member WHERE id = ? AND pw = ?";
+    public int login(String member_id, String pw) {
+        String sql = "SELECT COUNT(*) FROM shop_member WHERE member_id = ? AND pw = ?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // SQL 쿼리 준비
-            pstmt.setString(1, id);
-            pstmt.setString(2, password);
+            pstmt.setString(1, member_id);
+            pstmt.setString(2, pw);
 
             // 쿼리 실행
             try (ResultSet rs = pstmt.executeQuery()) {
