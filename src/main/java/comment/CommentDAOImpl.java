@@ -24,14 +24,13 @@ public class CommentDAOImpl implements CommentDAO {
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("conn successed...");
 
-            String sql = "INSERT INTO shop_comment(id, member_id, product_id, order_id, title, content) " +
-                    "VALUES(seq_comment.NEXTVAL, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO shop_comment(id, member_id, product_id, title, content) " +
+                    "VALUES(shop_comment_seq.NEXTVAL, ?, ?, ?, ?)";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, vo.getMember_id());
             pstmt.setInt(2, vo.getProduct_id());
-            pstmt.setInt(3, vo.getOrder_id());
-            pstmt.setString(4, vo.getTitle());
-            pstmt.setString(5, vo.getContent());
+            pstmt.setString(3, vo.getTitle());
+            pstmt.setString(4, vo.getContent());
 
             flag = pstmt.executeUpdate();
             System.out.println("flag : " + flag);
@@ -151,7 +150,6 @@ public class CommentDAOImpl implements CommentDAO {
                 comment.setId(rs.getInt("id"));
                 comment.setMember_id(rs.getString("member_id"));
                 comment.setProduct_id(rs.getInt("product_id"));
-                comment.setOrder_id(rs.getInt("order_id"));
                 comment.setTitle(rs.getString("title"));
                 comment.setContent(rs.getString("content"));
                 commentList.add(comment);

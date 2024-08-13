@@ -40,6 +40,22 @@
     <input type="submit" value="Buy Now" />
 </form>
 
+<!-- 댓글 작성 폼 추가 -->
+<h2>Leave a Comment</h2>
+<form action="c_insertOK.do" method="post">
+    <input type="hidden" name="product_id" value="${vo2.product_id}" />
+    <input type="hidden" name="member_id" value="${sessionScope.loggedInUser}" />
+    <p>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+    </p>
+    <p>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" required></textarea>
+    </p>
+    <input type="submit" value="Submit Comment">
+</form>
+
 <a href="p_selectAll.do">Back to Product List</a>
 <a href="p_update.do?product_id=${vo2.product_id}">Edit Product</a>
 <a href="p_delete.do?product_id=${vo2.product_id}">Delete Product</a>
