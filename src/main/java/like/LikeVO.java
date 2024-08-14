@@ -4,13 +4,21 @@ public class LikeVO {
 
     private int id;
 
-    private int member_id;
+    private String member_id; // 수정된 부분
 
     private int order_id;
 
     private int product_id;
 
-    private int likes;
+    private String likes;
+
+    public String getMember_id() {
+        return member_id;
+    }
+
+    public void setMember_id(String member_id) {
+        this.member_id = member_id;
+    }
 
     @Override
     public String toString() {
@@ -31,13 +39,7 @@ public class LikeVO {
         this.id = id;
     }
 
-    public int getMember_id() {
-        return member_id;
-    }
 
-    public void setMember_id(int member_id) {
-        this.member_id = member_id;
-    }
 
     public int getOrder_id() {
         return order_id;
@@ -55,11 +57,11 @@ public class LikeVO {
         this.product_id = product_id;
     }
 
-    public int getLikes() {
+    public String getLikes() {
         return likes;
     }
 
-    public void setLikes(int likes) {
+    public void setLikes(String likes) {
         this.likes = likes;
     }
 }

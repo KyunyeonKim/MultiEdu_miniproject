@@ -13,7 +13,7 @@
 </head>
 <body>
 <h1>Update Product</h1>
-<form action="p_updateOK.do" method="post">
+<form action="p_updateOK.do" method="post" enctype="multipart/form-data">
     <input type="hidden" id="product_id" name="product_id" value="${vo2.product_id}" />
 
     <label for="name">Name:</label>

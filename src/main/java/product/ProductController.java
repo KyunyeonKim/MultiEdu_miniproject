@@ -1,5 +1,10 @@
 package product;
 
+import comment.CommentDAO;
+import comment.CommentDAOImpl;
+import comment.CommentVO;
+import dislike.DislikeDAO;
+import dislike.DislikeDAOImpl;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -8,6 +13,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import like.LikeDAO;
+import like.LikeDAOImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +32,9 @@ public class ProductController extends HttpServlet {
 
     private ProductDAO dao = new ProductDAOImpl();
     private final String UPLOAD_DIRECTORY = "upload";
+    private CommentDAO commentDAO = new CommentDAOImpl();
+    private LikeDAO likeDAO = new LikeDAOImpl();
+    private DislikeDAO dislikeDAO = new DislikeDAOImpl();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -33,7 +43,7 @@ public class ProductController extends HttpServlet {
         String sPath = request.getServletPath();
         System.out.println("sPath:" + sPath);
 
-        // 분기 처리
+
         if (sPath.equals("/p_insert.do")) {
             RequestDispatcher rd = request.getRequestDispatcher("product/insert.jsp");
             rd.forward(request, response);
@@ -62,10 +72,18 @@ public class ProductController extends HttpServlet {
 
             ProductVO vo2 = dao.selectOne(vo);
 
+            List<CommentVO> list = commentDAO.commentselect(Integer.parseInt(productId));
+            int likeCount = likeDAO.getLikeCount(Integer.parseInt(productId));
+            int dislikeCount = dislikeDAO.getDislikeCount(Integer.parseInt(productId));
+
+            request.setAttribute("list", list);
             request.setAttribute("vo2", vo2);
+            request.setAttribute("likeCount", likeCount);
+            request.setAttribute("dislikeCount", dislikeCount);
 
             RequestDispatcher rd = request.getRequestDispatcher("product/selectOne.jsp");
             rd.forward(request, response);
+
         } else if (sPath.equals("/p_selectAll.do")) {
             List<ProductVO> list = dao.adminSelectAll();
             request.setAttribute("list", list);
@@ -84,19 +102,19 @@ public class ProductController extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("product/selectAll.jsp");
             rd.forward(request, response);
         } else if (sPath.equals("/p_insertOK.do")) {
-            // 파일 업로드를 위한 multipart request 처리
-            Part filePart = request.getPart("img"); // Retrieve the file part
+
+            Part filePart = request.getPart("img");
             String fileName = UUID.randomUUID().toString() + "_" + Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
             String filePath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY + File.separator + fileName;
 
-            // Save file to the server
+
             File uploadDir = new File(getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY);
             if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
             filePart.write(filePath);
 
-            // Retrieve other form parameters
+
             String productId = request.getParameter("product_id");
             String name = request.getParameter("name");
             String content = request.getParameter("content");
@@ -116,19 +134,19 @@ public class ProductController extends HttpServlet {
             vo.setContent(content);
             vo.setPrice(price);
             vo.setCompany(company);
-            vo.setImg(fileName); // Save the file name in the database
+            vo.setImg(fileName);
 
             int result = dao.insert(vo);
             if (result == 1) {
                 System.out.println("Insert succeeded...");
-                response.sendRedirect("p_selectAll.do"); // 서블릿 패스
+                response.sendRedirect("p_selectAll.do");
             } else {
                 System.out.println("Insert failed...");
-                response.sendRedirect("p_insert.do"); // 서블릿 패스
+                response.sendRedirect("p_insert.do");
             }
 
         } else if (sPath.equals("/p_updateOK.do")) {
-            // 파일 업로드 처리
+
             Part filePart = request.getPart("img");
             String fileName = null;
             if (filePart != null && filePart.getSize() > 0) {
@@ -172,10 +190,10 @@ public class ProductController extends HttpServlet {
             int result = dao.delete(vo);
             if (result == 1) {
                 System.out.println("Delete succeeded...");
-                response.sendRedirect("p_selectAll.do"); // 서블릿 패스
+                response.sendRedirect("p_selectAll.do");
             } else {
                 System.out.println("Delete failed...");
-                response.sendRedirect("p_delete.do?product_id=" + productId); // 서블릿 패스
+                response.sendRedirect("p_delete.do?product_id=" + productId);
             }
         }
     }
@@ -188,6 +206,6 @@ public class ProductController extends HttpServlet {
 
     @Override
     public void destroy() {
-        // 자원 해제 코드가 필요한 경우 여기에 추가
+
     }
 }

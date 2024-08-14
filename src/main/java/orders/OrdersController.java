@@ -33,12 +33,12 @@ public class OrdersController extends HttpServlet {
         } else if (sPath.equals("/o_insertOK.do")) {
             HttpSession session = request.getSession(false);
             if (session == null || session.getAttribute("loggedInUser") == null) {
-                // 세션이 없거나 로그인된 사용자가 없는 경우 로그인 페이지로 리다이렉트
+
                 response.sendRedirect("m_login.do");
                 return;
             }
 
-            // 세션에서 memberId 가져오기
+
             String memberId = (String) session.getAttribute("loggedInUser");
             int productId = Integer.parseInt(request.getParameter("product_id"));
 
@@ -49,31 +49,31 @@ public class OrdersController extends HttpServlet {
             int result = dao.insert(vo);
             if (result == 1) {
                 System.out.println("Order successfully placed");
-                response.sendRedirect("p_selectAll.do"); // 주문 성공 후 상품 목록 페이지로 이동
+                response.sendRedirect("p_selectAll.do");
             } else {
                 System.out.println("Order failed");
-                response.sendRedirect("p_selectAll.do?error=1"); // 주문 실패 시 에러 메시지 전달
+                response.sendRedirect("p_selectAll.do?error=1");
             }
         } else if  (sPath.equals("/o_pselectAll.do")) {
             HttpSession session = request.getSession(false);
             if (session == null || session.getAttribute("loggedInUser") == null) {
-                // 세션이 없거나 로그인된 사용자가 없는 경우 로그인 페이지로 리다이렉트
+
                 response.sendRedirect("m_login.do");
                 return;
             }
 
-            // 세션에서 member_id 가져오기
+
             String memberId = (String) session.getAttribute("loggedInUser");
 
-            // OrdersDAO의 OrderSellectAll 메서드 호출
+
 
 
             List<OrdersSeachVO> ordersList = dao.OrderSellectAll(memberId);
 
-            // 요청 속성에 ordersList를 설정
+
             request.setAttribute("ordersList", ordersList);
 
-            // JSP 페이지로 포워딩
+
             RequestDispatcher rd = request.getRequestDispatcher("order/orderSelectAll.jsp");
             rd.forward(request, response);
         }

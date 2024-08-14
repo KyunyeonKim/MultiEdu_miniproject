@@ -10,8 +10,13 @@ public class ProductDAOImpl implements ProductDAO {
     private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
     private static final String USER = "hr";
     private static final String PASSWORD = "hi123456";
+    private Connection conn;
+    private PreparedStatement pstmt;
+    private ResultSet rs;
 
-    static {
+
+    public ProductDAOImpl() {
+        System.out.println("ProductDAOImpl()....");
         try {
             Class.forName(DRIVER_NAME);
             System.out.println("Driver loaded successfully...");
@@ -22,6 +27,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public int insert(ProductVO vo) {
+        System.out.println("Inserting product...");
         String sql = "INSERT INTO shop_product(product_id, name, content, price, company, img) VALUES(?, ?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -33,7 +39,9 @@ public class ProductDAOImpl implements ProductDAO {
             pstmt.setString(5, vo.getCompany());
             pstmt.setString(6, vo.getImg());
 
-            return pstmt.executeUpdate();
+            int flag = pstmt.executeUpdate();
+            System.out.println("Insert flag: " + flag);
+            return flag;
         } catch (SQLException e) {
             throw new RuntimeException("Error inserting product.", e);
         }
@@ -41,6 +49,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public int update(ProductVO vo) {
+        System.out.println("Updating product...");
         String sql = "UPDATE shop_product SET name=?, content=?, price=?, company=?, img=? WHERE product_id=?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -52,7 +61,9 @@ public class ProductDAOImpl implements ProductDAO {
             pstmt.setString(5, vo.getImg());
             pstmt.setInt(6, vo.getProduct_id());
 
-            return pstmt.executeUpdate();
+            int flag = pstmt.executeUpdate();
+            System.out.println("Update flag: " + flag);
+            return flag;
         } catch (SQLException e) {
             throw new RuntimeException("Error updating product.", e);
         }
@@ -60,13 +71,16 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public int delete(ProductVO vo) {
+        System.out.println("Deleting product...");
         String sql = "DELETE FROM shop_product WHERE product_id=?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, vo.getProduct_id());
 
-            return pstmt.executeUpdate();
+            int flag = pstmt.executeUpdate();
+            System.out.println("Delete flag: " + flag);
+            return flag;
         } catch (SQLException e) {
             throw new RuntimeException("Error deleting product.", e);
         }
@@ -74,6 +88,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public ProductVO selectOne(ProductVO vo) {
+        System.out.println("Selecting one product...");
         String sql = "SELECT * FROM shop_product WHERE product_id=?";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -100,6 +115,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public List<ProductVO> adminSelectAll() {
+        System.out.println("Selecting all products...");
         List<ProductVO> productList = new ArrayList<>();
         String sql = "SELECT * FROM shop_product ORDER BY product_id DESC";
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -124,6 +140,7 @@ public class ProductDAOImpl implements ProductDAO {
 
     @Override
     public List<ProductVO> adminsearchList(String searchKey, String searchWord) {
+        System.out.println("Searching products...");
         List<ProductVO> productList = new ArrayList<>();
         String sql = "";
 

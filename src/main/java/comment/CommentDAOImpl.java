@@ -10,9 +10,9 @@ public class CommentDAOImpl implements CommentDAO {
     private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
     private static final String USER = "hr";
     private static final String PASSWORD = "hi123456";
-    private Connection conn;  // 커넥션 객체
-    private PreparedStatement pstmt;  // 쿼리(sql문-CRUD) 실행 객체
-    private ResultSet rs;  // select문 리턴 객체
+    private Connection conn;
+    private PreparedStatement pstmt;
+    private ResultSet rs;
 
     @Override
     public int commentinsert(CommentVO vo) {
@@ -133,26 +133,29 @@ public class CommentDAOImpl implements CommentDAO {
     }
 
     @Override
-    public List<CommentVO> selectAll() {
-        System.out.println("selectAll 조회");
+    public List<CommentVO> commentselect(int product_id) {
         List<CommentVO> commentList = new ArrayList<>();
+        System.out.println("commentselect 조회");
 
         try {
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("conn successed...");
 
-            String sql = "SELECT * FROM shop_comment ORDER BY id DESC";
+            String sql = "SELECT * FROM shop_comment WHERE product_id = ?";
             pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, product_id);
+
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                CommentVO comment = new CommentVO();
-                comment.setId(rs.getInt("id"));
-                comment.setMember_id(rs.getString("member_id"));
-                comment.setProduct_id(rs.getInt("product_id"));
-                comment.setTitle(rs.getString("title"));
-                comment.setContent(rs.getString("content"));
-                commentList.add(comment);
+                CommentVO vo = new CommentVO();
+                vo.setId(rs.getInt("id"));
+                vo.setMember_id(rs.getString("member_id"));
+                vo.setProduct_id(rs.getInt("product_id"));
+                vo.setTitle(rs.getString("title"));
+                vo.setContent(rs.getString("content"));
+
+                commentList.add(vo);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

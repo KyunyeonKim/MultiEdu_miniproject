@@ -1,0 +1,102 @@
+CREATE TABLE shop_member (
+member_id VARCHAR2(100) PRIMARY KEY,
+pw VARCHAR2(100) NOT NULL,
+tel VARCHAR2(100) NOT NULL,
+name VARCHAR2(100) NOT NULL
+);
+
+CREATE TABLE shop_product(
+product_id NUMBER PRIMARY KEY,
+name VARCHAR2(100) NOT NULL,
+content VARCHAR2(100) NOT NULL,
+price VARCHAR2(100) NOT NULL,
+company VARCHAR2(100) NOT NULL,
+img VARCHAR2(100) NOT NULL
+);
+
+
+CREATE TABLE shop_orders(
+order_id NUMBER PRIMARY KEY,
+member_id VARCHAR2(100) NOT NULL,
+product_id NUMBER NOT NULL,
+order_date VARCHAR2(100) NOT NULL,
+CONSTRAINT fk_member FOREIGN KEY (member_id) REFERENCES shop_member(member_id),
+CONSTRAINT fk_product FOREIGN KEY (product_id) REFERENCES shop_product(product_id)
+);
+
+
+ALTER TABLE shop_orders
+MODIFY order_date DATE;
+
+CREATE TABLE shop_like(
+id NUMBER PRIMARY KEY,
+member_id VARCHAR2(100) NOT NULL,
+product_id NUMBER NOT NULL,
+order_id NUMBER NOT NULL,
+likes VARCHAR2(100) NOT NULL,
+CONSTRAINT fk_shoplike_member FOREIGN KEY (member_id) REFERENCES shop_member(member_id),
+CONSTRAINT fk_shoplike_product FOREIGN KEY (product_id) REFERENCES shop_product(product_id),
+CONSTRAINT fk_shoplike_order FOREIGN KEY (order_id) REFERENCES shop_orders(order_id)
+);
+
+
+
+CREATE TABLE shop_dislike(
+id NUMBER PRIMARY KEY,
+member_id VARCHAR2(100) NOT NULL,
+product_id NUMBER NOT NULL,
+order_id NUMBER NOT NULL,
+dislikes VARCHAR2(100) NOT NULL,
+CONSTRAINT fk_shopdislike_member FOREIGN KEY (member_id) REFERENCES shop_member(member_id),
+CONSTRAINT fk_shopdislike_product FOREIGN KEY (product_id) REFERENCES shop_product(product_id),
+CONSTRAINT fk_shopdislike_order FOREIGN KEY (order_id) REFERENCES shop_orders(order_id)
+);
+
+
+CREATE TABLE shop_comment(
+id NUMBER PRIMARY KEY,
+member_id VARCHAR2(100) NOT NULL,
+product_id NUMBER NOT NULL,
+order_id NUMBER NOT NULL,
+title VARCHAR2(100) NOT NULL,
+content VARCHAR2(100) NOT NULL,
+CONSTRAINT fk_shopcomment_member FOREIGN KEY (member_id) REFERENCES shop_member(member_id),
+CONSTRAINT fk_shopcomment_product FOREIGN KEY (product_id) REFERENCES shop_product(product_id),
+CONSTRAINT fk_shopcomment_order FOREIGN KEY (order_id) REFERENCES shop_orders(order_id)
+);
+
+
+
+
+-- shop_like 테이블의 외래 키 제약 조건 제거
+ALTER TABLE shop_like
+DROP CONSTRAINT fk_shoplike_product;
+
+-- shop_dislike 테이블의 외래 키 제약 조건 제거
+ALTER TABLE shop_dislike
+DROP CONSTRAINT fk_shopdislike_product;
+
+-- shop_comment 테이블의 외래 키 제약 조건 제거
+ALTER TABLE shop_comment
+DROP CONSTRAINT fk_shopcomment_product;
+
+-- 외래 키 제약 조건을 ON DELETE CASCADE 옵션과 함께 재생성
+ALTER TABLE shop_orders
+ADD CONSTRAINT fk_product
+FOREIGN KEY (product_id) REFERENCES shop_product(product_id)
+ON DELETE CASCADE;
+
+ALTER TABLE shop_like
+ADD CONSTRAINT fk_shoplike_product
+FOREIGN KEY (product_id) REFERENCES shop_product(product_id)
+ON DELETE CASCADE;
+
+ALTER TABLE shop_dislike
+ADD CONSTRAINT fk_shopdislike_product
+FOREIGN KEY (product_id) REFERENCES shop_product(product_id)
+ON DELETE CASCADE;
+
+ALTER TABLE shop_comment
+ADD CONSTRAINT fk_shopcomment_product
+FOREIGN KEY (product_id) REFERENCES shop_product(product_id)
+ON DELETE CASCADE;

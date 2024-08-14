@@ -11,9 +11,9 @@ public class MemberDAOImpl implements MemberDao{
     private static final String URL = "jdbc:oracle:thin:@localhost:1521:xe";
     private static final String USER = "hr";
     private static final String PASSWORD = "hi123456";
-    private Connection conn;//커넥션객체
-    private PreparedStatement pstmt;//쿼리(sql문-CRUD)실행객체
-    private ResultSet rs;//select문 리턴 객체
+    private Connection conn;
+    private PreparedStatement pstmt;
+    private ResultSet rs;
 
 
     @Override
@@ -203,15 +203,15 @@ public class MemberDAOImpl implements MemberDao{
             conn = DriverManager.getConnection(URL,USER,PASSWORD);
             System.out.println("conn successed...");
 
-            //4. 쿼리문 전달(요청)
+
             String sql = "select * from shop_member order by num desc";
             pstmt = conn.prepareStatement(sql);
 
-            //5. 반환(응답)
-            rs = pstmt.executeQuery();//select문에서 만 사용하는 함수
 
-            //6. rs >>> list에 할당
-            while(rs.next()){//읽어들일 행이 있으면 true
+            rs = pstmt.executeQuery();
+
+
+            while(rs.next()){
                 MemberVO vo = new MemberVO();
                 vo.setMember_id(rs.getString("member_id"));
                 vo.setPw(rs.getString("pw"));
@@ -272,7 +272,7 @@ public class MemberDAOImpl implements MemberDao{
             pstmt.setString(1,"%"+searchWord+"%");
 
 
-            rs = pstmt.executeQuery();//select문에서 만 사용하는 함수
+            rs = pstmt.executeQuery();
 
 
             while(rs.next()){//읽어들일 행이 있으면 true
@@ -319,21 +319,21 @@ public class MemberDAOImpl implements MemberDao{
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            // SQL 쿼리 준비
+
             pstmt.setString(1, member_id);
             pstmt.setString(2, pw);
 
-            // 쿼리 실행
+
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     int count = rs.getInt(1);
-                    return count > 0 ? 1 : 0; // 로그인 성공 또는 실패
+                    return count > 0 ? 1 : 0;
                 }
-                return -1; // 쿼리 실행 실패
+                return -1;
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // 로그를 남기세요
-            return -1; // 예외 발생 시 실패 코드 반환
+            e.printStackTrace();
+            return -1;
         }
     }
 

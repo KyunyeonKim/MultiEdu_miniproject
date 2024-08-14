@@ -117,7 +117,9 @@ public class MemberController extends HttpServlet {
                 RequestDispatcher rd = request.getRequestDispatcher("product/selectAll.jsp");
                 rd.forward(request, response);
             } else {
-                response.sendRedirect("m_login.do?error=1");
+                request.setAttribute("errorMessage", "아이디가 없습니다.");
+                RequestDispatcher rd = request.getRequestDispatcher("errorPage.jsp");
+                rd.forward(request, response);
             }
         } else if (sPath.equals("/m_insertOK.do")) {
             String memberId = request.getParameter("member_id");
@@ -155,6 +157,5 @@ public class MemberController extends HttpServlet {
 
     @Override
     public void destroy() {
-        // 자원 해제 코드가 필요한 경우 여기에 추가
     }
 }

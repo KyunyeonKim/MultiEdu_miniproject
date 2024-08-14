@@ -10,7 +10,7 @@ public interface CommentDAO {
 
     public int commentdelete(CommentVO vo);
 
-    public List<CommentVO>selectAll();
+    public List<CommentVO>commentselect(int productId);
 
 
 
